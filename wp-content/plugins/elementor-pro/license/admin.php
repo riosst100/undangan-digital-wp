@@ -149,6 +149,7 @@ class Admin {
 	}
 
 	public function register_page() {
+	    return;
 		$menu_text = esc_html__( 'License', 'elementor-pro' );
 
 		add_submenu_page(
@@ -227,7 +228,7 @@ class Admin {
 						<small>
 							<?php // Fake link to make the user think something is going on. In fact, every refresh of this page will re-check the license status. ?>
 							<a class="button" href="<?php echo esc_url( static::get_url() . '&check-license=1' ); ?>">
-								<i class="eicon-sync"></i>
+								<i class="eicon-sync" aria-hidden="true"></i>
 								<?php echo esc_html__( 'Check license status', 'elementor-pro' ); ?>
 							</a>
 						</small>
@@ -294,7 +295,7 @@ class Admin {
 
 		echo esc_html__( 'Status', 'elementor-pro' ); ?>:
 		<?php if ( $license_data['success'] ) : ?>
-			<span style="color: #008000; font-style: italic;"><?php echo esc_html__( 'Active - 4desyner.com', 'elementor-pro' ); ?></span>
+			<span style="color: #008000; font-style: italic;"><?php echo esc_html__( 'Active', 'elementor-pro' ); ?></span>
 
 			<?php
 			$redirect_to_document = Pro_Utils::_unstable_get_super_global_value( $_GET, 'redirect-to-document' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended

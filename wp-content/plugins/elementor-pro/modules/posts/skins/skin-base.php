@@ -915,7 +915,7 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 		$optional_attributes_html = $this->get_optional_link_attributes_html();
 
 		?>
-		<a class="elementor-post__thumbnail__link" href="<?php echo esc_attr( $this->current_permalink ); ?>" <?php echo esc_attr( $optional_attributes_html ); ?>>
+		<a class="elementor-post__thumbnail__link" href="<?php echo esc_attr( $this->current_permalink ); ?>" tabindex="-1" <?php echo esc_attr( $optional_attributes_html ); ?>>
 			<div class="elementor-post__thumbnail"><?php echo wp_kses_post( $thumbnail_html ); ?></div>
 		</a>
 		<?php
@@ -993,7 +993,7 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 			<div class="elementor-post__read-more-wrapper">
 		<?php endif; ?>
 
-		<a class="elementor-post__read-more" href="<?php echo esc_url( $this->current_permalink ); ?>" aria-label="<?php echo esc_attr( $aria_label_text ); ?>" <?php Utils::print_unescaped_internal_string( $optional_attributes_html ); ?>>
+		<a class="elementor-post__read-more" href="<?php echo esc_url( $this->current_permalink ); ?>" aria-label="<?php echo esc_attr( $aria_label_text ); ?>" tabindex="-1" <?php Utils::print_unescaped_internal_string( $optional_attributes_html ); ?>>
 			<?php echo wp_kses_post( $read_more ); ?>
 		</a>
 
@@ -1158,6 +1158,10 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 				$paginate_args = $this->get_paginate_args_for_rest_request( $paginate_args );
 			}
 
+			if ( $this->parent->is_allow_to_use_custom_page_option() ) {
+				$paginate_args['format'] = $this->get_pagination_format( $paginate_args );
+			}
+
 			$links = paginate_links( $paginate_args );
 		}
 
@@ -1173,6 +1177,11 @@ abstract class Skin_Base extends Elementor_Skin_Base {
 			<?php echo implode( PHP_EOL, $links ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</nav>
 		<?php
+	}
+
+	protected function get_pagination_format( $paginate_args ) {
+		$query_string_connector = is_preview() && ! empty( $paginate_args['base'] ) && strpos( $paginate_args['base'], '?' ) ? '&' : '?';
+		return $query_string_connector . 'e-page-' . $this->parent->get_id() . '=%#%';
 	}
 
 	protected function get_paginate_args_for_singular_post( $paginate_args ) {
